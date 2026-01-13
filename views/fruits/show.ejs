@@ -17,5 +17,8 @@
 <form action="/fruits/<%=fruit._id%>?_method=DELETE" method="POST">
   <button type="submit">Delete Fruit <%= fruit.name %></button>
 </form>
+<a href="/fruits/<%= fruit._id %>/edit">
+    <button>Edit</button>
+</a>
   </body>
 </html>

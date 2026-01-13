@@ -44,12 +44,27 @@ app.get("/fruits/:fruitId", async (req, res) => {
     fruit: fruit,
   });
 });
-app.delete("/fruits/:fruitId", async(req, res) => {
- //you have to remember the model
- await Fruit.findByIdAndDelete(req.params.fruitId);
- res.redirect("/fruits")
+app.delete("/fruits/:fruitId", async (req, res) => {
+  //you have to remember the model
+  await Fruit.findByIdAndDelete(req.params.fruitId);
+  res.redirect("/fruits");
 });
 
+app.get("/fruits/:fruitId/edit", async (req, res) => {
+  const fruitData = await Fruit.findById(req.params.fruitId);
+  res.render("fruits/edit.ejs", {fruit: fruitData});
+
+});
+
+app.put("/fruits/:fruitId", async (req,res)=>{
+  if (req.body.isReadyToEat === "on") {
+    req.body.isReadyToEat = true;
+  } else {
+    req.body.isReadyToEat = false;
+  }
+  await Fruit.findByIdAndUpdate(req.params.fruitId, req.body)
+  res.redirect(`/fruits/${req.params.fruitId}`)
+})
 
 //server that needs to be ran
 db.on("connected", () => {
