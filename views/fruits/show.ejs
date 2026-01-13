@@ -11,8 +11,11 @@
     <% if (fruit.isReadyToEat){ %>
         <p>This fruit is ready to eat!</p>
         <% }else{ %> 
-            <p>This fruit is not ripe yet - give it another. day.</p>
-            
+            <p>This fruit is not ripe yet - give it another day.</p>
             <% } %>
+            <!-- new delete button -->
+<form action="/fruits/<%=fruit._id%>?_method=DELETE" method="POST">
+  <button type="submit">Delete Fruit <%= fruit.name %></button>
+</form>
   </body>
 </html>

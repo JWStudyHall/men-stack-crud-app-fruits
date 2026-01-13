@@ -1,5 +1,6 @@
 const express = require("express");
 const logger = require("morgan");
+const methodOverride = require("method-override");
 const db = require("./db/connection.js");
 const Fruit = require("./models/fruit.js");
 
@@ -7,6 +8,7 @@ const app = express();
 
 //Middleware
 app.use(express.urlencoded({ extended: false }));
+app.use(methodOverride("_method"));
 app.use(logger("dev"));
 
 //routes
@@ -30,18 +32,24 @@ app.post("/fruits", async (req, res) => {
 });
 
 app.get("/fruits", async (req, res) => {
-   const allFruits = await Fruit.find();
+  const allFruits = await Fruit.find();
   res.render("fruits/index.ejs", {
     fruits: allFruits,
   });
 });
 
-app.get("/fruits/:fruitId", async (req,res)=>{
-  const fruit= await Fruit.findById(req.params.fruitId)
+app.get("/fruits/:fruitId", async (req, res) => {
+  const fruit = await Fruit.findById(req.params.fruitId);
   res.render("fruits/show.ejs", {
     fruit: fruit,
-  })
-})
+  });
+});
+app.delete("/fruits/:fruitId", async(req, res) => {
+ //you have to remember the model
+ await Fruit.findByIdAndDelete(req.params.fruitId);
+ res.redirect("/fruits")
+});
+
 
 //server that needs to be ran
 db.on("connected", () => {
